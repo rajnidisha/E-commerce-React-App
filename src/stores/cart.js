@@ -1,4 +1,3 @@
-import { createStore } from "redux";
 import { omit } from "lodash";
 const ADD_TO_CART = "ADD_TO_CART";
 const REMOVE_FROM_CART = "REMOVE_FROM_CART";
@@ -23,10 +22,11 @@ function cartReducers(state = { items: {} }, action) {
     case ADD_TO_CART: {
       const product = action.payload;
       console.log(state);
-      // state.items[product.id].quantity += 1;
-      // newState = { ...state };
-      // return newState;
       if (state.items[product.id]) {
+        // let newState = { ...state };
+
+        // newState.items[product.id].quantity += 1;
+        // return newState;
         return {
           ...state,
           items: {
@@ -36,8 +36,16 @@ function cartReducers(state = { items: {} }, action) {
               quantity: state.items[product.id].quantity + 1
             }
           }
-        }
+        } // immutable state
       } else {
+        // let newState = { ...state };
+
+        // newState.items[product.id] = {
+        //   ...product,
+        //   quantity: 1
+        // };
+        // return newState;
+
         return {
           ...state,
           items: {
@@ -56,8 +64,7 @@ function cartReducers(state = { items: {} }, action) {
         return {
           ...state,
           items: omit(state.items, [product.id])
-        }
-        
+        }   
       } else {
         return {
           ...state,
@@ -76,9 +83,6 @@ function cartReducers(state = { items: {} }, action) {
   }
 }
 
-let store = createStore(cartReducers);
+export default cartReducers;
 
-export default store;
-
-
-//state = { items : { 1: {id: 1, } , 2: {} , 3: {}}}
+// mutable and immutable

@@ -1,134 +1,68 @@
 import './App.css';
-// import { products, d } from './components/Products';
 import { useState } from 'react';
 
-import DetailsPage from './Pages/DetailsPage';
-import HomePage from './Pages/HomePage';
-import NotFoundPage from './Pages/NotFoundPage';
-import WatchListPage from './Pages/WatchListPage';
-import MovieContext from './context/MovieContext';
-// import Callbacks from './components/Callbacks';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import CartContext from "./context/CartContext";
+
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import NavBar from './components/NavBar';
-// import Ex from './components/ExampleEffect/ExampleEffect';
-// [{},{},{}, ]
-// [...watchlist, movieObj];
 function App() {
-  // console.log(products);
-  // console.log(d);
-
-  // const [input, setInput] = useState("");
-  // const [count, setCount] = useState(0);
-
-  const [watchlist, setWatchList] = useState(JSON.parse(localStorage.getItem('movies')));
-
-  console.log(watchlist);
-  function handleAddToWatchList(movieObj) {
-    let updatedWatchlist = [...watchlist, movieObj];
-    // [1,2,3,4]  
-    // [1, 2, 3, 4, 5]
-    // updateWatchlist = watchlist.push(movieObj);
-    // updateWatchlist = [...watchlist];
-    setWatchList(updatedWatchlist);
-    localStorage.setItem('movies', JSON.stringify(updatedWatchlist))
+  const [cart, setCart] = useState({});
+  //cart = {};
+  function increaseQuantity(product) {
+    const newCart = { ...cart };
+    if (!newCart[product.id]) {
+      newCart[product.id] = {
+        id: product.id,
+        title: product.title,
+        price: product.price.value,
+        quantity: 0
+      }
+    }
+    newCart[product.id].quantity += 1;
+    setCart(newCart);
   }
 
-  function deleteFromWatchList(movieObj) {
-    let filteredMovies = watchlist.filter((movie) => {
-      return movie.id !== movieObj.id
-    });
-    setWatchList(filteredMovies);
-    localStorage.setItem('movies', JSON.stringify(filteredMovies))
+  function decreaseQuantity(product) {
+    const newCart = { ...cart };
+    if (!newCart[product.id]) return;
+    newCart[product.id].quantity -= 1;
+    if (newCart[product.id].quantity <= 0) {
+      delete newCart[product.id];
+    }
+    setCart(newCart);
+
+    // if(newCart[product.id] === 1) { delete newCart[product.id]} else { newCart[product.id] -=1}
   }
-
-  // 
-  // const incrementCount = useCallback(() => setCount(count + 1), [count]);
-
-  // const valueRef = useRef(0);
-  // const inputRef = useRef(0);
-
-  // const onSubmit = () => {
-  //   // console.log(valueRef.current);
-  //   console.log(inputRef.current.value);
-  //   console.log(inputRef.current);
-  //   inputRef.current.focus();
-  //   valueRef.current = valueRef.current + 1;
-  //   // setCount(count + 1);
-  // }
-
-  // useEffect(() => {
-  //   console.log(valueRef.current);
-  // }, [valueRef.current]);
 
   return (
-    <div className="App">
-      {/* <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={incrementCount}>Increment Count</button>
-      <h3>Input Text: {input}</h3>
-      <h3>Count: {count}</h3>
-      <hr/>
-      <Callbacks count={count} xyz={incrementCount} /> */}
-
-      {/* 
-
-        {
-          watchlist: watchlist,
-          handleAddToWatchList: handleAddToWatchList,
-          deleteFromWatchList: deleteFromWatchList
-        }
-      
-      */}
-      <BrowserRouter>
-        <MovieContext.Provider value={{ watchlist, setWatchList, handleAddToWatchList, deleteFromWatchList }}>
-          <NavBar />
+    <CartContext.Provider value={{ cart, increaseQuantity, decreaseQuantity }}>
+      <div className="App">
+        <BrowserRouter>
           <Switch>
-            {/* <Route
-              path="/"
-              exact={true}
-              render={() => <HomePage watchlist={watchlist} handleAddToWatchList={handleAddToWatchList} deleteFromWatchList={deleteFromWatchList} />}
-            /> */}
-
             <Route
               path="/"
               exact={true}
               component={HomePage}
             />
-            <Route
-              path="/details/:id"
-              exact={true}
-              component={DetailsPage}
-            />
-            <Route
-              path="/watchlist"
-              exact={true}
-              component={WatchListPage}
-            />
             <Route component={NotFoundPage} />
             </Switch>
-        </MovieContext.Provider>
-      </BrowserRouter>
-      {/* <Ex /> */}
-      {/* <span>{valueRef.current}</span> */}
-      {/* <span>{count}</span> */}
-      {/* <input id="btn" ref={inputRef} type="text" />
-      <button onClick={onSubmit}>New value</button> */}
-    </div>
+        </BrowserRouter>
+        </div>
+    </CartContext.Provider>
+
   );
 }
 
 export default App;
 
 
-//  this is a react component
-// A react component is reusable piece of js which returns html 
-// the name of the component is usualy capitalised
-// a component can be imported by another component in order to use it
+// props = {count: 1, key: 19}
+
+// product = {product: {}}
+// {product}
+// function Products({count, key});
 
 
-//[{id:2},{id:3},{id:4}]
-// {id:2}
-// [{id:3}, {id:4}]
+//
+// cart = {1: { id: 1, price: 2,qty: 1} , 2: {id: 2, price:33,qty: 1} , 3: {id: 3, price:44,qty:1}, 4: {id:4, price:444 ,qty:1} }

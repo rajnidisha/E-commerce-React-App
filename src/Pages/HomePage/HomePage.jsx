@@ -1,13 +1,10 @@
-
-import Banner from '../../components/Banner';
-import Movies from '../../components/Movies';
-// function HomePage({watchlist,handleAddToWatchList, deleteFromWatchList }) {
-    function HomePage() {
-return (<>
-    
-    <Banner/>
-    {/* <Movies watchlist={watchlist} handleAddToWatchList={handleAddToWatchList} deleteFromWatchList={deleteFromWatchList}/> */}
-    <Movies />
-</>)
+import Products from "../../components/Products";
+import Categories from "../../components/Categories";
+function HomePage() {
+  return (<>
+    <Categories />
+    <Products />
+  </>)
 }
+
 export default HomePage;

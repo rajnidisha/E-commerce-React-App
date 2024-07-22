@@ -1,14 +1,17 @@
 import './ProductCard.css';
 // import Rating from './Rating.js'
-function ProductCard({ name, price }) {
+import ReduxAddToCart from '../ReduxAddToCart';
+function ProductCard({ product }) {
+  // console.log("product cart", product.id);
   return (
     <div className="card">
       <div>
-        {name}
+        {product.title}
       </div>
       <div>
-        {price.value}
+        {product.price.value}
       </div>
+      <ReduxAddToCart product={product}/>
     </div>
   )
 }

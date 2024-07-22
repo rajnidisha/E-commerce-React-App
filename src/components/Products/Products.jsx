@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import ProductCard from "../ProductCard";
+import useWindowSize from "../../hooks/useWindowSize";
 // export let d = 200;
 
 // const products = [
@@ -31,24 +32,50 @@ import ProductCard from "../ProductCard";
 
 function Products() {
   let [products, setProducts] = useState([]);
+  let [loading, setLoading] = useState(true);
+
+  console.log(useWindowSize());
+
   useEffect(function () {
     fetch('https://602fc537a1e9d20017af105e.mockapi.io/api/v1/products').then((response) => {
       return response.json();
     }).then((res) => {
       console.log(res);
       setProducts(res);
+      setLoading(false);
     })
   }, [])
 
-  return (
-    <div>
-      {
-        products.map(function(product, index) {
-          return (<ProductCard name={product.title} price={product.price} key={index} />)
-        })
-      }
-    </div>
-  )
+  if (loading) {
+    return (
+      <>
+        <img alt="loading" src="https://media.tenor.com/XasjKGMk_wAAAAAM/load-loading.gif" />
+      </>
+    )
+  } else {
+    return (
+      <div>
+        {
+          products.map(function(product, index) {
+            return (<ProductCard product={product} key={index} />)
+          })
+        }
+      </div>
+    )
+  }
 }
 
-export default Products;
+export default memo(Products);
+
+// props = {product: {} , key: 1}
+// function ProductCard({product})
+
+// function abc({products, count}) {}
+// abc({ count:1, products:10});
+
+// function Abc({products, count}) {}
+// <Abc products={{k:10}} count=1 / >
+
+// props = {products: {k:10} , count: 1}
+
+// function ({id, name, price}) {}
