@@ -1,8 +1,8 @@
 import './App.css';
 import { useState } from 'react';
 
-import HomePage from './pages/HomePage';
-import NotFoundPage from './pages/NotFoundPage';
+import HomePage from './Pages/HomePage';
+import NotFoundPage from './Pages/NotFoundPage';
 import CartContext from "./context/CartContext";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
